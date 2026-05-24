@@ -1,17 +1,20 @@
-// omara-matrix - Classic Matrix digital rain screensaver for Omara
-
-use omara_screensavers::{branding, effects};
+// omara-matrix - Dense Matrix-style rain using Omara characters
 
 use crossterm::{
     event::{self, Event},
     execute,
     terminal::{self, EnterAlternateScreen, LeaveAlternateScreen},
 };
-use ratatui::{backend::CrosstermBackend, layout::Rect, style::{Color, Style}, widgets::Paragraph, Terminal};
+use ratatui::{
+    backend::CrosstermBackend,
+    style::{Color, Style},
+    widgets::Block,
+    Terminal,
+};
 use std::io;
 use std::time::{Duration, Instant};
 
-use crate::effects::matrix::create_matrix_effect;
+use omara_screensavers::effects::matrix::{create_dense_matrix_rain, MatrixRain};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     terminal::enable_raw_mode()?;
@@ -36,8 +39,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn run<B: ratatui::backend::Backend>(terminal: &mut Terminal<B>) -> Result<(), Box<dyn std::error::Error>> {
-    let art = branding::load_branding();
-    let mut effect = create_matrix_effect(&art);
+    let size = terminal.size()?;
+    let mut rain = create_dense_matrix_rain(size.width, size.height);
     let start = Instant::now();
     let mut last = Instant::now();
 
@@ -48,29 +51,49 @@ fn run<B: ratatui::backend::Backend>(terminal: &mut Terminal<B>) -> Result<(), B
             }
         }
 
-        // Auto-exit after ~30 seconds
-        if start.elapsed() > Duration::from_secs(30) {
+        // Auto-exit after ~45 seconds for testing
+        if start.elapsed() > Duration::from_secs(45) {
             break;
         }
 
-        effect.tick();
+        rain.tick();
 
         terminal.draw(|f| {
-            let size = f.area();
-            f.render_widget(ratatui::widgets::Block::default().style(Style::default().bg(Color::Black)), size);
+            let area = f.area();
+            f.render_widget(
+                Block::default().style(Style::default().bg(Color::Black)),
+                area,
+            );
 
-            let mut screen = vec![vec![' '; effect.width as usize]; effect.height as usize];
-            for g in &effect.glyphs {
-                let ix = g.x.round() as isize;
-                let iy = g.y.round() as isize;
-                if ix >= 0 && iy >= 0 && (ix as u16) < effect.width && (iy as u16) < effect.height {
-                    screen[iy as usize][ix as usize] = g.ch;
+            // Draw dense rain with fading trails
+            for drop in &rain.drops {
+                let x = drop.x.round() as u16;
+                if x >= area.width {
+                    continue;
+                }
+
+                for i in 0..drop.length {
+                    let y = (drop.y - i as f32).round() as isize;
+                    if y < 0 || y >= area.height as isize {
+                        continue;
+                    }
+
+                    let ch = drop.chars[i as usize % drop.chars.len()];
+
+                    // Brightness fades down the trail
+                    let brightness = if i == 0 {
+                        230u8
+                    } else {
+                        ((180 - (i as u16 * 9)).max(30)) as u8
+                    };
+
+                    let color = Color::Rgb(0, brightness, 60);
+
+                    let para = ratatui::widgets::Paragraph::new(ch.to_string())
+                        .style(Style::default().fg(color));
+                    f.render_widget(para, ratatui::layout::Rect::new(x, y as u16, 1, 1));
                 }
             }
-
-            let text: String = screen.into_iter().map(|r| r.into_iter().collect::<String>()).collect::<Vec<_>>().join("\n");
-            let p = Paragraph::new(text).style(Style::default().fg(Color::Rgb(0, 200, 80)));
-            f.render_widget(p, centered_rect(effect.width + 4, effect.height + 2, size));
         })?;
 
         let now = Instant::now();
@@ -83,20 +106,3 @@ fn run<B: ratatui::backend::Backend>(terminal: &mut Terminal<B>) -> Result<(), B
     Ok(())
 }
 
-fn centered_rect(width: u16, height: u16, r: Rect) -> Rect {
-    let v = ratatui::layout::Layout::default()
-        .direction(ratatui::layout::Direction::Vertical)
-        .constraints([
-            ratatui::layout::Constraint::Length((r.height.saturating_sub(height))/2),
-            ratatui::layout::Constraint::Length(height),
-            ratatui::layout::Constraint::Length((r.height.saturating_sub(height))/2),
-        ]).split(r);
-
-    ratatui::layout::Layout::default()
-        .direction(ratatui::layout::Direction::Horizontal)
-        .constraints([
-            ratatui::layout::Constraint::Length((r.width.saturating_sub(width))/2),
-            ratatui::layout::Constraint::Length(width),
-            ratatui::layout::Constraint::Length((r.width.saturating_sub(width))/2),
-        ]).split(v[1])[1]
-}
