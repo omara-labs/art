@@ -1,6 +1,6 @@
 [Plymouth Theme]
 Name=Omara Boot
-Description=Omara Niri boot theme with ASCII logo and dots animation
+Description=Omara Niri boot theme with starfield, ASCII logo, and dots animation
 ModuleName=two-step
 
 [two-step]
@@ -19,3 +19,4 @@ Transition=fade
 TransitionDuration=0.5
 BackgroundStartColor=0x000000
 BackgroundEndColor=0x000000
+BackgroundImage=/usr/share/plymouth/themes/omara-boot/background.png
