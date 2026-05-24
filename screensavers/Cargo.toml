@@ -1,3 +1,3 @@
 [workspace]
-members = ["bounce", "matrix", "beams", "pour", "unstable", "singularity"]
+members = ["bounce", "matrix", "beams", "pour", "unstable", "singularity", "collapse", "wormhole"]
 resolver = "2"
