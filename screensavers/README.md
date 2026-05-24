@@ -58,9 +58,9 @@ kitty -e ~/Projects/omara/screensavers/target/release/omara-matrix
 3. Register it in `Cargo.toml` under `[[bin]]`.
 4. Rebuild.
 
-## Future Integration (Hyprland / Omara OS)
+## Future Integration (Niri / Omara OS)
 
-These binaries are designed to be launched by `hypridle` via a small launcher script (similar to Omarchy), one per monitor, with the proper app-id/class.
+These binaries are designed to be launched by `niri` idle detection via a small launcher script (similar to Omarchy), one per monitor, with the proper app-id/class.
 
 Example launcher names you can create later:
 - `omara-launch-screensaver-matrix`

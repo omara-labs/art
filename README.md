@@ -20,7 +20,7 @@ This repository contains everything that defines how Omara *looks and feels* —
 - Wallpapers (static + animated)
 - Color palettes and theming tools
 - Icon, cursor, and font assets
-- Hyprland / compositor visual configurations
+- Niri / compositor visual configurations
 - Launcher, bar, and notification themes
 - Boot splash and branding assets
 - Any other artistic or visual elements
@@ -36,7 +36,7 @@ omara-art/
 │   ├── fonts/        # Font files and configurations
 │   └── brand/        # Official branding assets
 ├── effects/          # Future visual effects and shaders
-├── themes/           # GTK, Qt, Hyprland, terminal themes
+├── themes/           # GTK, Qt, Niri, terminal themes
 ├── wallpapers/
 └── docs/
 ```

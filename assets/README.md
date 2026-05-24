@@ -4,7 +4,7 @@ This directory holds all non-code visual assets for Omara.
 
 ## Structure
 
-- `palettes/` — Color palettes (base16, matugen, hyprland, terminal, etc.)
+- `palettes/` — Color palettes (base16, matugen, niri, terminal, etc.)
 - `graphics/` — SVGs, logos, illustrations, icons
 - `fonts/` — Font files and configuration
 - `brand/` — Official Omara wordmarks, ASCII art, boot splash assets
