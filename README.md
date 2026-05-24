@@ -1,5 +1,14 @@
 # Omara Art
 
+```
+  ██████╗  ███╗   ███╗  █████╗  ██████╗   █████╗ 
+ ██╔═══██╗ ████╗ ████║ ██╔══██╗ ██╔══██╗ ██╔══██╗
+ ██║   ██║ ██╔████╔██║ ███████║ ██████╔╝ ███████║
+ ██║   ██║ ██║╚██╔╝██║ ██╔══██║ ██╔══██╗ ██╔══██║
+ ╚██████╔╝ ██║ ╚═╝ ██║ ██║  ██║ ██║  ██║ ██║  ██║
+  ╚═════╝  ╚═╝     ╚═╝ ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═╝  ╚═╝
+```
+
 The official home for all visual and artistic assets for **Omara OS**.
 
 This repository contains everything that defines how Omara *looks and feels* — from screensavers and animations to themes, palettes, graphics, and design systems.
